@@ -32,6 +32,7 @@ const ReactFlatTable = forwardRef(({ state, ...props }, ref) => {
     useEffect(() => {
         // Only create the instance once when component mounts
         const flatTable = FlatTable(containerId, {
+            "state": state,
             ...props
         });
 

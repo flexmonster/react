@@ -32,6 +32,7 @@ const ReactPivotTable = forwardRef(({ state, ...props }, ref) => {
     useEffect(() => {
         // Only create the instance once when component mounts
         const pivotTable = PivotTable(containerId, {
+            "state": state,
             ...props
         });
 

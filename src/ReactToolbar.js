@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle, use } from 'react';
 //import ReactDOM from 'react-dom';
 //import Props from 'prop-types';

@@ -32,6 +32,7 @@ const ReactPivotFieldList = forwardRef(({ state, ...props }, ref) => {
     useEffect(() => {
         // Only create the instance once when component mounts
         const pivotFieldList = PivotFieldList(containerId, {
+            "state": state,
             ...props
         });
 

@@ -4,6 +4,15 @@
   "description": "React wrapper component for Flexmonster",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.cjs.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "files": [
     "dist"
   ],
@@ -14,12 +23,27 @@
   },
   "author": "",
   "license": "ISC",
+  "keywords": [
+    "react",
+    "nextjs",
+    "next.js",
+    "flexmonster",
+    "pivot-table",
+    "pivot",
+    "charts",
+    "data-visualization",
+    "ssr",
+    "server-side-rendering",
+    "client-component"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flexmonster/react"
+  },
   "peerDependencies": {
+    "@flexmonster/flexmonster": "file:../../../dev/project/triple/Clients/Flexmonster/npm-package/flexmonster-flexmonster-3.0.0.tgz",
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
     "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
-  },
-  "dependencies": {
-    "@flexmonster/flexmonster": "file:../../../dev/project/triple/Clients/Flexmonster/npm-package/flexmonster-flexmonster-3.0.0.tgz"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

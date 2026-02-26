@@ -32,6 +32,7 @@ const ReactFlatFieldList = forwardRef(({ state, ...props }, ref) => {
     useEffect(() => {
         // Only create the instance once when component mounts
         const flatFieldList = FlatFieldList(containerId, {
+            "state": state,
             ...props
         });
 
