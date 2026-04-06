@@ -4,6 +4,5 @@ export { default as ReactToolbar } from './ReactToolbar';
 export { default as ReactFlatFieldList } from './ReactFlatFieldList';
 export { default as ReactFlatTable } from './ReactFlatTable';
 export { default as ReactPivotFieldList } from './ReactPivotFieldList';
-export { default as ReactPivotFilter } from './ReactPivotFilter';
-export { default as ReactFlatFilter } from './ReactFlatFilter';
+export { default as ReactFilter } from './ReactFilter';
 export { default as ReactMemberFilter } from './ReactMemberFilter';

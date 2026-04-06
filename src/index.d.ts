@@ -15,3 +15,5 @@ export const ReactToolbar: ForwardRefExoticComponent<FlexmonsterProps & RefAttri
 export const ReactFlatFieldList: ForwardRefExoticComponent<FlexmonsterProps & RefAttributes<FlexmonsterRef>>;
 export const ReactFlatTable: ForwardRefExoticComponent<FlexmonsterProps & RefAttributes<FlexmonsterRef>>;
 export const ReactPivotFieldList: ForwardRefExoticComponent<FlexmonsterProps & RefAttributes<FlexmonsterRef>>;
+export const ReactFilter: ForwardRefExoticComponent<FlexmonsterProps & RefAttributes<FlexmonsterRef>>;
+export const ReactMemberFilter: ForwardRefExoticComponent<FlexmonsterProps & RefAttributes<FlexmonsterRef>>;
