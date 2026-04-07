@@ -5,4 +5,3 @@ export { default as ReactFlatFieldList } from './ReactFlatFieldList';
 export { default as ReactFlatTable } from './ReactFlatTable';
 export { default as ReactPivotFieldList } from './ReactPivotFieldList';
 export { default as ReactFilter } from './ReactFilter';
-export { default as ReactMemberFilter } from './ReactMemberFilter';
