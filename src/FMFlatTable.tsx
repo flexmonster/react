@@ -3,15 +3,15 @@
 import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import { FlatTable, type IFMFlatTable, type IFMFlatTableOptionsInputParams, type StateInputParams } from '@flexmonster/flexmonster';
 
-export interface FMFlatRef extends IFMFlatTable {
+export interface FMFlatTableRef extends IFMFlatTable {
 }
 
-export interface FMFlatProps {
+export interface FMFlatTableProps {
   state?: StateInputParams;
   options?: IFMFlatTableOptionsInputParams;
 }
 
-const FMFlat = forwardRef<FMFlatRef, FMFlatProps>(({ state, options }, ref) => {
+const FMFlatTable = forwardRef<FMFlatTableRef, FMFlatTableProps>(({ state, options }, ref) => {
     if (typeof window === 'undefined') {
         return null;
     }
@@ -41,7 +41,7 @@ const FMFlat = forwardRef<FMFlatRef, FMFlatProps>(({ state, options }, ref) => {
             },
         };
 
-        return new Proxy({} as IFMFlatTable, handler) as FMFlatRef;
+        return new Proxy({} as IFMFlatTable, handler) as FMFlatTableRef;
     });
 
     useEffect(() => {
@@ -62,6 +62,6 @@ const FMFlat = forwardRef<FMFlatRef, FMFlatProps>(({ state, options }, ref) => {
     return <div id={containerId} />;
 });
 
-FMFlat.displayName = 'FMFlat';
+FMFlatTable.displayName = 'FMFlatTable';
 
-export default FMFlat;
+export default FMFlatTable;

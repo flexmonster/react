@@ -3,15 +3,15 @@
 import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import { PivotTable, type IFMPivotTable, type IFMPivotTableOptionsInputParams, type StateInputParams } from '@flexmonster/flexmonster';
 
-export interface FMPivotRef extends IFMPivotTable {
+export interface FMPivotTableRef extends IFMPivotTable {
 }
 
-export interface FMPivotProps {
+export interface FMPivotTableProps {
   state?: StateInputParams;
   options?: IFMPivotTableOptionsInputParams;
 }
 
-const FMPivot = forwardRef<FMPivotRef, FMPivotProps>(({ state, options }, ref) => {
+const FMPivotTable = forwardRef<FMPivotTableRef, FMPivotTableProps>(({ state, options }, ref) => {
     if (typeof window === 'undefined') {
         return null;
     }
@@ -41,7 +41,7 @@ const FMPivot = forwardRef<FMPivotRef, FMPivotProps>(({ state, options }, ref) =
             },
         };
 
-        return new Proxy({} as IFMPivotTable, handler) as FMPivotRef;
+        return new Proxy({} as IFMPivotTable, handler) as FMPivotTableRef;
     });
 
     useEffect(() => {
@@ -62,6 +62,6 @@ const FMPivot = forwardRef<FMPivotRef, FMPivotProps>(({ state, options }, ref) =
     return <div id={containerId} />;
 });
 
-FMPivot.displayName = 'FMPivot';
+FMPivotTable.displayName = 'FMPivotTable';
 
-export default FMPivot;
+export default FMPivotTable;

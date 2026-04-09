@@ -3,15 +3,15 @@
 import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import { Flexmonster, type IFMComposite, type IFMCompositeOptionsInputParams, type StateInputParams } from '@flexmonster/flexmonster';
 
-export interface FMCompositeRef extends IFMComposite {
+export interface FMFlexmonsterRef extends IFMComposite {
 }
 
-export interface FMCompositeProps {
+export interface FMFlexmonsterProps {
   state?: StateInputParams;
   options?: IFMCompositeOptionsInputParams;
 }
 
-const FMComposite = forwardRef<FMCompositeRef, FMCompositeProps>(({ state, options }, ref) => {
+const FMFlexmonster = forwardRef<FMFlexmonsterRef, FMFlexmonsterProps>(({ state, options }, ref) => {
     if (typeof window === 'undefined') {
         return null;
     }
@@ -41,7 +41,7 @@ const FMComposite = forwardRef<FMCompositeRef, FMCompositeProps>(({ state, optio
             },
         };
 
-        return new Proxy({} as IFMComposite, handler) as FMCompositeRef;
+        return new Proxy({} as IFMComposite, handler) as FMFlexmonsterRef;
     });
 
     useEffect(() => {
@@ -62,6 +62,6 @@ const FMComposite = forwardRef<FMCompositeRef, FMCompositeProps>(({ state, optio
     return <div id={containerId} />;
 });
 
-FMComposite.displayName = 'FMComposite';
+FMFlexmonster.displayName = 'FMFlexmonster';
 
-export default FMComposite;
+export default FMFlexmonster;

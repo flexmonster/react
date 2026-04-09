@@ -1,6 +1,6 @@
-export { default as FMComposite } from './FMComposite';
-export { default as FMPivot } from './FMPivot';
-export { default as FMFlat } from './FMFlat';
+export { default as FMFlexmonster } from './FMFlexmonster';
+export { default as FMPivotTable } from './FMPivotTable';
+export { default as FMFlatTable } from './FMFlatTable';
 export { default as FMPivotFieldList } from './FMPivotFieldList';
 export { default as FMFlatFieldList } from './FMFlatFieldList';
 export { default as FMToolbar } from './FMToolbar';
