@@ -16,22 +16,31 @@ const FMComposite = forwardRef<FMCompositeRef, FMCompositeProps>(({ state, optio
         return null;
     }
 
-    const [containerId] = useState(`flexmonster-container-${Math.random().toString(36).substr(2, 9)}`);
+    const [containerId] = useState(`fm-flexmonster-${Math.random().toString(36).substr(2, 9)}`);
     const flexmonsterRef = useRef<IFMComposite | null>(null);
 
     useImperativeHandle(ref, () => {
+        const methodCache = new Map<string | symbol, (...args: any[]) => any>();
+
         const handler: ProxyHandler<IFMComposite> = {
-            get(target, prop) {
+            get(_, prop) {
                 const instance = flexmonsterRef.current;
-                if (instance && prop in instance) {
-                    const value = (instance as any)[prop];
-                    return typeof value === 'function' 
-                        ? (...args: any[]) => value.apply(instance, args) 
-                        : value;
+                if (!instance || !(prop in instance)) return undefined;
+
+                const value = (instance as any)[prop];
+                if (typeof value !== 'function') return value;
+
+                if (!methodCache.has(prop)) {
+                    methodCache.set(prop, (...args: any[]) =>
+                        flexmonsterRef.current
+                            ? (flexmonsterRef.current as any)[prop]?.apply(flexmonsterRef.current, args)
+                            : undefined
+                    );
                 }
-                return undefined;
+                return methodCache.get(prop);
             },
         };
+
         return new Proxy({} as IFMComposite, handler) as FMCompositeRef;
     });
 

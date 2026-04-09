@@ -16,22 +16,31 @@ const FMFlatFieldList = forwardRef<FMFlatFieldListRef, FMFlatFieldListProps>(({ 
         return null;
     }
 
-    const [containerId] = useState(`flat-field-list-container-${Math.random().toString(36).substr(2, 9)}`);
+    const [containerId] = useState(`fm-flat-field-list-${Math.random().toString(36).substr(2, 9)}`);
     const flatFieldListRef = useRef<IFMFlatFieldList | null>(null);
 
     useImperativeHandle(ref, () => {
+        const methodCache = new Map<string | symbol, (...args: any[]) => any>();
+
         const handler: ProxyHandler<IFMFlatFieldList> = {
-            get(target, prop) {
+            get(_, prop) {
                 const instance = flatFieldListRef.current;
-                if (instance && prop in instance) {
-                    const value = (instance as any)[prop];
-                    return typeof value === 'function' 
-                        ? (...args: any[]) => value.apply(instance, args) 
-                        : value;
+                if (!instance || !(prop in instance)) return undefined;
+
+                const value = (instance as any)[prop];
+                if (typeof value !== 'function') return value;
+
+                if (!methodCache.has(prop)) {
+                    methodCache.set(prop, (...args: any[]) =>
+                        flatFieldListRef.current
+                            ? (flatFieldListRef.current as any)[prop]?.apply(flatFieldListRef.current, args)
+                            : undefined
+                    );
                 }
-                return undefined;
+                return methodCache.get(prop);
             },
         };
+
         return new Proxy({} as IFMFlatFieldList, handler) as FMFlatFieldListRef;
     });
 

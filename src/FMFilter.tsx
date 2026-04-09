@@ -17,22 +17,31 @@ const FMFilter = forwardRef<FMFilterRef, FMFilterProps>(({ state, options, field
         return null;
     }
 
-    const [containerId] = useState(`filter-container-${Math.random().toString(36).substr(2, 9)}`);
+    const [containerId] = useState(`fm-filter-${Math.random().toString(36).substr(2, 9)}`);
     const filterRef = useRef<IFMFilter | null>(null);
 
     useImperativeHandle(ref, () => {
+        const methodCache = new Map<string | symbol, (...args: any[]) => any>();
+
         const handler: ProxyHandler<IFMFilter> = {
-            get(target, prop) {
+            get(_, prop) {
                 const instance = filterRef.current;
-                if (instance && prop in instance) {
-                    const value = (instance as any)[prop];
-                    return typeof value === 'function' 
-                        ? (...args: any[]) => value.apply(instance, args) 
-                        : value;
+                if (!instance || !(prop in instance)) return undefined;
+
+                const value = (instance as any)[prop];
+                if (typeof value !== 'function') return value;
+
+                if (!methodCache.has(prop)) {
+                    methodCache.set(prop, (...args: any[]) =>
+                        filterRef.current
+                            ? (filterRef.current as any)[prop]?.apply(filterRef.current, args)
+                            : undefined
+                    );
                 }
-                return undefined;
+                return methodCache.get(prop);
             },
         };
+
         return new Proxy({} as IFMFilter, handler) as FMFilterRef;
     });
 

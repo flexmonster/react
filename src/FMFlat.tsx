@@ -16,22 +16,31 @@ const FMFlat = forwardRef<FMFlatRef, FMFlatProps>(({ state, options }, ref) => {
         return null;
     }
 
-    const [containerId] = useState(`flat-table-container-${Math.random().toString(36).substr(2, 9)}`);
+    const [containerId] = useState(`fm-flat-table-${Math.random().toString(36).substr(2, 9)}`);
     const flatTableRef = useRef<IFMFlatTable | null>(null);
 
     useImperativeHandle(ref, () => {
+        const methodCache = new Map<string | symbol, (...args: any[]) => any>();
+
         const handler: ProxyHandler<IFMFlatTable> = {
-            get(target, prop) {
+            get(_, prop) {
                 const instance = flatTableRef.current;
-                if (instance && prop in instance) {
-                    const value = (instance as any)[prop];
-                    return typeof value === 'function' 
-                        ? (...args: any[]) => value.apply(instance, args) 
-                        : value;
+                if (!instance || !(prop in instance)) return undefined;
+
+                const value = (instance as any)[prop];
+                if (typeof value !== 'function') return value;
+
+                if (!methodCache.has(prop)) {
+                    methodCache.set(prop, (...args: any[]) =>
+                        flatTableRef.current
+                            ? (flatTableRef.current as any)[prop]?.apply(flatTableRef.current, args)
+                            : undefined
+                    );
                 }
-                return undefined;
+                return methodCache.get(prop);
             },
         };
+
         return new Proxy({} as IFMFlatTable, handler) as FMFlatRef;
     });
 

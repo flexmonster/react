@@ -16,22 +16,31 @@ const FMPivotFieldList = forwardRef<FMPivotFieldListRef, FMPivotFieldListProps>(
         return null;
     }
 
-    const [containerId] = useState(`pivot-field-list-container-${Math.random().toString(36).substr(2, 9)}`);
+    const [containerId] = useState(`fm-pivot-field-list-${Math.random().toString(36).substr(2, 9)}`);
     const pivotFieldListRef = useRef<IFMPivotFieldList | null>(null);
 
     useImperativeHandle(ref, () => {
+        const methodCache = new Map<string | symbol, (...args: any[]) => any>();
+
         const handler: ProxyHandler<IFMPivotFieldList> = {
-            get(target, prop) {
+            get(_, prop) {
                 const instance = pivotFieldListRef.current;
-                if (instance && prop in instance) {
-                    const value = (instance as any)[prop];
-                    return typeof value === 'function' 
-                        ? (...args: any[]) => value.apply(instance, args) 
-                        : value;
+                if (!instance || !(prop in instance)) return undefined;
+
+                const value = (instance as any)[prop];
+                if (typeof value !== 'function') return value;
+
+                if (!methodCache.has(prop)) {
+                    methodCache.set(prop, (...args: any[]) =>
+                        pivotFieldListRef.current
+                            ? (pivotFieldListRef.current as any)[prop]?.apply(pivotFieldListRef.current, args)
+                            : undefined
+                    );
                 }
-                return undefined;
+                return methodCache.get(prop);
             },
         };
+
         return new Proxy({} as IFMPivotFieldList, handler) as FMPivotFieldListRef;
     });
 
