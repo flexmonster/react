@@ -1,7 +1,12 @@
 {
   "name": "@flexmonster/react",
   "version": "1.0.7",
+  "license": "https://www.flexmonster.com/software-license-agreement/",
   "description": "React wrapper component for Flexmonster",
+  "author": {
+    "name": "Flexmonster",
+    "email": "help@flexmonster.com"
+  },
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
@@ -31,8 +36,6 @@
     "dev": "rollup -c -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
   "keywords": [
     "react",
     "nextjs",
