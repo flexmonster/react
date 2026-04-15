@@ -2,7 +2,7 @@
   "name": "@flexmonster/react",
   "version": "1.0.7",
   "license": "https://www.flexmonster.com/software-license-agreement/",
-  "description": "React wrapper component for Flexmonster",
+  "description": "React wrapper for Flexmonster Pivot",
   "author": {
     "name": "Flexmonster",
     "email": "help@flexmonster.com"
