@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
-import { Filter, type IFMFilter, type IFMFilterInputParams, type StateInputParams } from '@flexmonster/flexmonster';
+import { Filter, type IFMFilter, type IFMFilterInputParams, type StateInputParams } from '@flexmonster/js';
 
 export interface FMFilterRef extends IFMFilter {
 }
 
 export interface FMFilterProps {
-  state?: StateInputParams;
-  options?: IFMFilterInputParams;
-  fieldName?: string;
+    fieldName?: string;
+    state?: StateInputParams;
+    options?: IFMFilterInputParams;
 }
 
 const FMFilter = forwardRef<FMFilterRef, FMFilterProps>(({ state, options, fieldName }, ref) => {
@@ -60,7 +60,7 @@ const FMFilter = forwardRef<FMFilterRef, FMFilterProps>(({ state, options, field
         }
     }, [state]);
 
-    return <div id={containerId} />;
+    return <div style={{ width: '100%', height: '100%' }} id={containerId} />;
 });
 
 FMFilter.displayName = 'FMFilter';

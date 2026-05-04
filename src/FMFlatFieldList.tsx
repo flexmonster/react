@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
-import { FlatFieldList, type IFMFlatFieldList, type IFMFlatFieldListOptionsInputParams, type StateInputParams } from '@flexmonster/flexmonster';
+import { FlatFieldList, type IFMFlatFieldList, type IFMFlatFieldListOptionsInputParams, type StateInputParams } from '@flexmonster/js';
 
 export interface FMFlatFieldListRef extends IFMFlatFieldList {
 }
@@ -59,7 +59,7 @@ const FMFlatFieldList = forwardRef<FMFlatFieldListRef, FMFlatFieldListProps>(({ 
         }
     }, [state]);
 
-    return <div id={containerId} />;
+    return <div style={{ width: '100%', height: '100%' }} id={containerId} />;
 });
 
 FMFlatFieldList.displayName = 'FMFlatFieldList';

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
-import { PivotFieldList, type IFMPivotFieldList, type IFMPivotFieldListOptionsInputParams, type StateInputParams } from '@flexmonster/flexmonster';
+import { PivotFieldList, type IFMPivotFieldList, type IFMPivotFieldListOptionsInputParams, type StateInputParams } from '@flexmonster/js';
 
 export interface FMPivotFieldListRef extends IFMPivotFieldList {
 }
@@ -59,7 +59,7 @@ const FMPivotFieldList = forwardRef<FMPivotFieldListRef, FMPivotFieldListProps>(
         }
     }, [state]);
 
-    return <div id={containerId} />;
+    return <div style={{ width: '100%', height: '100%' }} id={containerId} />;
 });
 
 FMPivotFieldList.displayName = 'FMPivotFieldList';

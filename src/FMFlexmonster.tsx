@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
-import { Flexmonster, type IFMComposite, type IFMCompositeOptionsInputParams, type StateInputParams } from '@flexmonster/flexmonster';
+import { Flexmonster, IFMFlexmonsterInputParams, type IFMFlexmonster, type IFMFlexmonsterOptionsInputParams, type StateInputParams } from '@flexmonster/js';
 
-export interface FMFlexmonsterRef extends IFMComposite {
+export interface FMFlexmonsterRef extends IFMFlexmonster {
 }
 
-export interface FMFlexmonsterProps {
+export interface FMFlexmonsterProps extends IFMFlexmonsterInputParams {
   state?: StateInputParams;
-  options?: IFMCompositeOptionsInputParams;
+  options?: IFMFlexmonsterOptionsInputParams;
 }
 
 const FMFlexmonster = forwardRef<FMFlexmonsterRef, FMFlexmonsterProps>(({ state, options }, ref) => {
@@ -17,12 +17,12 @@ const FMFlexmonster = forwardRef<FMFlexmonsterRef, FMFlexmonsterProps>(({ state,
     }
 
     const [containerId] = useState(`fm-flexmonster-${Math.random().toString(36).substr(2, 9)}`);
-    const flexmonsterRef = useRef<IFMComposite | null>(null);
+    const flexmonsterRef = useRef<IFMFlexmonster | null>(null);
 
     useImperativeHandle(ref, () => {
         const methodCache = new Map<string | symbol, (...args: any[]) => any>();
 
-        const handler: ProxyHandler<IFMComposite> = {
+        const handler: ProxyHandler<IFMFlexmonster> = {
             get(_, prop) {
                 const instance = flexmonsterRef.current;
                 if (!instance || !(prop in instance)) return undefined;
@@ -41,7 +41,7 @@ const FMFlexmonster = forwardRef<FMFlexmonsterRef, FMFlexmonsterProps>(({ state,
             },
         };
 
-        return new Proxy({} as IFMComposite, handler) as FMFlexmonsterRef;
+        return new Proxy({} as IFMFlexmonster, handler) as FMFlexmonsterRef;
     });
 
     useEffect(() => {
@@ -59,7 +59,7 @@ const FMFlexmonster = forwardRef<FMFlexmonsterRef, FMFlexmonsterProps>(({ state,
         }
     }, [state]);
 
-    return <div id={containerId} />;
+    return <div style={{ width: '100%', height: '100%' }} id={containerId} />;
 });
 
 FMFlexmonster.displayName = 'FMFlexmonster';
