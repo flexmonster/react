@@ -33,6 +33,12 @@ jobs:
         run: |
           VERSION="${{ inputs.version }}"
           DIST_TAG="${{ inputs.tag }}"
+          # If no tag provided and the version is a prerelease (contains "-"),
+          # auto-detect the dist-tag from the prerelease identifier.
+          # npm requires --tag when publishing prereleases.
+          if [ -z "$DIST_TAG" ] && [[ "$VERSION" == *-* ]]; then
+            DIST_TAG=$(echo "$VERSION" | grep -oP '(?<=-)[a-zA-Z]+' | head -1)
+          fi
           if [ -n "$DIST_TAG" ]; then
             TAG_FLAG="--tag $DIST_TAG"
           else
