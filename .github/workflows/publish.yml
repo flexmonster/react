@@ -8,14 +8,9 @@ on:
         required: true
         type: string
       tag:
-        description: 'npm dist-tag'
-        required: true
-        type: choice
-        default: latest
-        options:
-          - latest
-          - next
-          - beta
+        description: 'npm dist-tag (e.g. latest, beta, next). Auto-detected from version if omitted.'
+        required: false
+        type: string
       dry_run:
         description: 'Dry run (do not actually publish to npm)'
         required: false
@@ -28,28 +23,55 @@ jobs:
     permissions:
       contents: read
       id-token: write
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Resolve version and dist-tag
+        id: version
+        run: |
+          VERSION="${{ inputs.version }}"
+          DIST_TAG="${{ inputs.tag }}"
+          if [ -n "$DIST_TAG" ]; then
+            TAG_FLAG="--tag $DIST_TAG"
+          else
+            TAG_FLAG=""
+          fi
+          echo "value=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "dist_tag=$DIST_TAG" >> "$GITHUB_OUTPUT"
+          echo "tag_flag=$TAG_FLAG" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
+          scope: '@flexmonster'
 
-      - name: Update package.json versions
+      - name: Check if version already exists
+        run: |
+          PKG_NAME=$(node -p "require('./package.json').name")
+          VERSION="${{ steps.version.outputs.value }}"
+          if npm view "${PKG_NAME}@${VERSION}" version --registry https://registry.npmjs.org 2>/dev/null; then
+            echo "::error::Version ${VERSION} already exists on npm."
+            exit 1
+          fi
+
+      - name: Set package version
+        run: npm version "${{ steps.version.outputs.value }}" --no-git-tag-version
+
+      - name: Bump @flexmonster/js peer dependency
         env:
-          NEW_VERSION: ${{ inputs.version }}
+          NEW_VERSION: ${{ steps.version.outputs.value }}
         run: |
           node -e "
             const fs = require('fs');
             const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-            pkg.version = process.env.NEW_VERSION;
             if (pkg.peerDependencies && pkg.peerDependencies['@flexmonster/js']) {
               pkg.peerDependencies['@flexmonster/js'] = process.env.NEW_VERSION;
+              fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
             }
-            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
           "
 
       - name: Install dependencies
@@ -61,14 +83,10 @@ jobs:
       - name: Show package.json after version bump
         run: cat package.json
 
-      - name: Publish to npm (dry run)
+      - name: Publish package (dry run)
         if: ${{ inputs.dry_run }}
-        run: npm publish --access public --tag ${{ inputs.tag }} --dry-run
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish ${{ steps.version.outputs.tag_flag }} --dry-run
 
-      - name: Publish to npm
+      - name: Publish package
         if: ${{ !inputs.dry_run }}
-        run: npm publish --access public --tag ${{ inputs.tag }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish ${{ steps.version.outputs.tag_flag }}
