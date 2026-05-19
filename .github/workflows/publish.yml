@@ -11,6 +11,7 @@ on:
         description: 'npm dist-tag (e.g. latest, beta, next). Auto-detected from version if omitted.'
         required: false
         type: string
+        default: latest
       dry_run:
         description: 'Dry run (do not actually publish to npm)'
         required: false
