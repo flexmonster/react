@@ -1,7 +1,9 @@
 # Flexmonster Pivot 3.0 (preview) wrapper for React
 
+[![Flexmonster Pivot](https://cdn.flexmonster.com/readmes/react_30.webp)](https://prerelease.flexmonster.com/?r=wrap_30_react)
 Website: [prerelease.flexmonster.com](https://prerelease.flexmonster.com/?r=wrap_30_react)
 
+[![NPM](https://img.shields.io/npm/v/@flexmonster/react)](https://www.npmjs.com/package/@flexmonster/react)
 [![Github Stars](https://img.shields.io/github/stars/flexmonster?style=social)](https://github.com/flexmonster) [![Twitter](https://img.shields.io/twitter/follow/Flexmonster?style=social)](https://x.com/Flexmonster)
 
 Flexmonster 3.0 is an upcoming major update for [Flexmonster Pivot Table & Charts](https://www.flexmonster.com/?r=wrap_30_react), a powerful JavaScript pivot table component. Check out the [Flexmonster 3.0 roadmap](https://prerelease.flexmonster.com/roadmap?r=wrap_30_react#current) and keep track of the latest updates.
