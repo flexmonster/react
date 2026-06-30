@@ -9,9 +9,10 @@ export interface FMFlatTableRef extends IFMFlatTable {
 export interface FMFlatTableProps {
   state?: StateInputParams;
   options?: IFMFlatTableOptionsInputParams;
+  name?: string;
 }
 
-const FMFlatTable = forwardRef<FMFlatTableRef, FMFlatTableProps>(({ state, options }, ref) => {
+const FMFlatTable = forwardRef<FMFlatTableRef, FMFlatTableProps>(({ state, options, name }, ref) => {
     if (typeof window === 'undefined') {
         return null;
     }
@@ -45,7 +46,7 @@ const FMFlatTable = forwardRef<FMFlatTableRef, FMFlatTableProps>(({ state, optio
     });
 
     useEffect(() => {
-        const flatTable = FlatTable(containerId, { state, options });
+        const flatTable = FlatTable(containerId, { state, options, name});
         flatTableRef.current = flatTable;
         return () => {
             flatTableRef.current?.dispose();
