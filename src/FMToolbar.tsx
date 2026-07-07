@@ -9,9 +9,10 @@ export interface FMToolbarRef extends IFMToolbar {
 export interface FMToolbarProps {
   state?: StateInputParams;
   options?: IFMToolbarOptionsInputParams;
+  for?: string;
 }
 
-const FMToolbar = forwardRef<FMToolbarRef, FMToolbarProps>(({ state, options }, ref) => {
+const FMToolbar = forwardRef<FMToolbarRef, FMToolbarProps>(({ state, options, for: forControl }, ref) => {
     if (typeof window === 'undefined') {
         return null;
     }
@@ -45,7 +46,9 @@ const FMToolbar = forwardRef<FMToolbarRef, FMToolbarProps>(({ state, options }, 
     });
 
     useEffect(() => {
-        const toolbar = Toolbar(containerId, { state, options });
+        // The standalone `for` attribute takes priority; fall back to `options.for` when it is empty.
+        const resolvedOptions = forControl ? { ...options, for: forControl } : options;
+        const toolbar = Toolbar(containerId, { state, options: resolvedOptions });
         toolbarRef.current = toolbar;
         return () => {
             toolbarRef.current?.dispose();
