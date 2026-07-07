@@ -9,9 +9,10 @@ export interface FMPivotTableRef extends IFMPivotTable {
 export interface FMPivotTableProps {
   state?: StateInputParams;
   options?: IFMPivotTableOptionsInputParams;
+  name?: string;
 }
 
-const FMPivotTable = forwardRef<FMPivotTableRef, FMPivotTableProps>(({ state, options }, ref) => {
+const FMPivotTable = forwardRef<FMPivotTableRef, FMPivotTableProps>(({ state, options, name }, ref) => {
     if (typeof window === 'undefined') {
         return null;
     }
@@ -45,7 +46,7 @@ const FMPivotTable = forwardRef<FMPivotTableRef, FMPivotTableProps>(({ state, op
     });
 
     useEffect(() => {
-        const pivotTable = PivotTable(containerId, { state, options });
+        const pivotTable = PivotTable(containerId, { state, options, name });
         pivotTableRef.current = pivotTable;
         return () => {
             pivotTableRef.current?.dispose();
