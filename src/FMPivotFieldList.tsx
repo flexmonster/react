@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { useEffect, useId, useRef, forwardRef, useImperativeHandle } from 'react';
 import { PivotFieldList, type IFMPivotFieldList, type IFMPivotFieldListOptionsInputParams, type StateInputParams } from '@flexmonster/js';
 
 export interface FMPivotFieldListRef extends IFMPivotFieldList {
@@ -12,11 +12,7 @@ export interface FMPivotFieldListProps {
 }
 
 const FMPivotFieldList = forwardRef<FMPivotFieldListRef, FMPivotFieldListProps>(({ state, options }, ref) => {
-    if (typeof window === 'undefined') {
-        return null;
-    }
-
-    const [containerId] = useState(`fm-pivot-field-list-${Math.random().toString(36).substr(2, 9)}`);
+    const containerId = `fm-pivot-field-list-${useId()}`;
     const pivotFieldListRef = useRef<IFMPivotFieldList | null>(null);
 
     useImperativeHandle(ref, () => {
@@ -42,7 +38,7 @@ const FMPivotFieldList = forwardRef<FMPivotFieldListRef, FMPivotFieldListProps>(
         };
 
         return new Proxy({} as IFMPivotFieldList, handler) as FMPivotFieldListRef;
-    });
+    }, []);
 
     useEffect(() => {
         const pivotFieldList = PivotFieldList(containerId, { state, options });

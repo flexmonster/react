@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { useEffect, useId, useRef, forwardRef, useImperativeHandle } from 'react';
 import { FlatTable, type IFMFlatTable, type IFMFlatTableOptionsInputParams, type StateInputParams } from '@flexmonster/js';
 
 export interface FMFlatTableRef extends IFMFlatTable {
@@ -13,11 +13,7 @@ export interface FMFlatTableProps {
 }
 
 const FMFlatTable = forwardRef<FMFlatTableRef, FMFlatTableProps>(({ state, options, name }, ref) => {
-    if (typeof window === 'undefined') {
-        return null;
-    }
-
-    const [containerId] = useState(`fm-flat-table-${Math.random().toString(36).substr(2, 9)}`);
+    const containerId = `fm-flat-table-${useId()}`;
     const flatTableRef = useRef<IFMFlatTable | null>(null);
 
     useImperativeHandle(ref, () => {
@@ -43,7 +39,7 @@ const FMFlatTable = forwardRef<FMFlatTableRef, FMFlatTableProps>(({ state, optio
         };
 
         return new Proxy({} as IFMFlatTable, handler) as FMFlatTableRef;
-    });
+    }, []);
 
     useEffect(() => {
         const flatTable = FlatTable(containerId, { state, options, name});

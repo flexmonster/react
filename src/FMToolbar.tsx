@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { useEffect, useId, useRef, forwardRef, useImperativeHandle } from 'react';
 import { Toolbar, type IFMToolbar, type IFMToolbarOptionsInputParams, type StateInputParams } from '@flexmonster/js';
 
 export interface FMToolbarRef extends IFMToolbar {
@@ -13,11 +13,7 @@ export interface FMToolbarProps {
 }
 
 const FMToolbar = forwardRef<FMToolbarRef, FMToolbarProps>(({ state, options, for: forControl }, ref) => {
-    if (typeof window === 'undefined') {
-        return null;
-    }
-
-    const [containerId] = useState(`fm-toolbar-${Math.random().toString(36).substr(2, 9)}`);
+    const containerId = `fm-toolbar-${useId()}`;
     const toolbarRef = useRef<IFMToolbar | null>(null);
 
     useImperativeHandle(ref, () => {
@@ -43,7 +39,7 @@ const FMToolbar = forwardRef<FMToolbarRef, FMToolbarProps>(({ state, options, fo
         };
 
         return new Proxy({} as IFMToolbar, handler) as FMToolbarRef;
-    });
+    }, []);
 
     useEffect(() => {
         // The standalone `for` attribute takes priority; fall back to `options.for` when it is empty.
