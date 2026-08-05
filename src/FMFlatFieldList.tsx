@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import { FlatFieldList, type IFMFlatFieldList, type IFMFlatFieldListOptionsInputParams, type StateInputParams } from '@flexmonster/js';
+import { FMStateContext } from './FMStateContext';
 
 export interface FMFlatFieldListRef extends IFMFlatFieldList {
 }
@@ -11,7 +12,10 @@ export interface FMFlatFieldListProps {
   options?: IFMFlatFieldListOptionsInputParams;
 }
 
-const FMFlatFieldList = forwardRef<FMFlatFieldListRef, FMFlatFieldListProps>(({ state, options }, ref) => {
+const FMFlatFieldList = forwardRef<FMFlatFieldListRef, FMFlatFieldListProps>(({ state: ownState, options }, ref) => {
+    const groupState = useContext(FMStateContext);
+    const state = ownState ?? groupState;
+
     if (typeof window === 'undefined') {
         return null;
     }

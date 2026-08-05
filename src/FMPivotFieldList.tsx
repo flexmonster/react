@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import { PivotFieldList, type IFMPivotFieldList, type IFMPivotFieldListOptionsInputParams, type StateInputParams } from '@flexmonster/js';
+import { FMStateContext } from './FMStateContext';
 
 export interface FMPivotFieldListRef extends IFMPivotFieldList {
 }
@@ -11,7 +12,10 @@ export interface FMPivotFieldListProps {
   options?: IFMPivotFieldListOptionsInputParams;
 }
 
-const FMPivotFieldList = forwardRef<FMPivotFieldListRef, FMPivotFieldListProps>(({ state, options }, ref) => {
+const FMPivotFieldList = forwardRef<FMPivotFieldListRef, FMPivotFieldListProps>(({ state: ownState, options }, ref) => {
+    const groupState = useContext(FMStateContext);
+    const state = ownState ?? groupState;
+
     if (typeof window === 'undefined') {
         return null;
     }

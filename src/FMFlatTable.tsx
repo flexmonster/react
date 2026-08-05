@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import { FlatTable, type IFMFlatTable, type IFMFlatTableOptionsInputParams, type StateInputParams } from '@flexmonster/js';
+import { FMStateContext } from './FMStateContext';
 
 export interface FMFlatTableRef extends IFMFlatTable {
 }
@@ -11,7 +12,10 @@ export interface FMFlatTableProps {
   options?: IFMFlatTableOptionsInputParams;
 }
 
-const FMFlatTable = forwardRef<FMFlatTableRef, FMFlatTableProps>(({ state, options }, ref) => {
+const FMFlatTable = forwardRef<FMFlatTableRef, FMFlatTableProps>(({ state: ownState, options }, ref) => {
+    const groupState = useContext(FMStateContext);
+    const state = ownState ?? groupState;
+
     if (typeof window === 'undefined') {
         return null;
     }

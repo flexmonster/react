@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import { PivotTable, type IFMPivotTable, type IFMPivotTableOptionsInputParams, type StateInputParams } from '@flexmonster/js';
+import { FMStateContext } from './FMStateContext';
 
 export interface FMPivotTableRef extends IFMPivotTable {
 }
@@ -11,7 +12,10 @@ export interface FMPivotTableProps {
   options?: IFMPivotTableOptionsInputParams;
 }
 
-const FMPivotTable = forwardRef<FMPivotTableRef, FMPivotTableProps>(({ state, options }, ref) => {
+const FMPivotTable = forwardRef<FMPivotTableRef, FMPivotTableProps>(({ state: ownState, options }, ref) => {
+    const groupState = useContext(FMStateContext);
+    const state = ownState ?? groupState;
+
     if (typeof window === 'undefined') {
         return null;
     }
