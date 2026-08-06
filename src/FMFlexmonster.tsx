@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { useContext, useEffect, useId, useRef, forwardRef, useImperativeHandle } from 'react';
 import { Flexmonster, IFMFlexmonsterInputParams, type IFMFlexmonster, type IFMFlexmonsterOptionsInputParams, type StateInputParams } from '@flexmonster/js';
 import { FMStateContext } from './FMStateContext';
 
@@ -16,11 +16,7 @@ const FMFlexmonster = forwardRef<FMFlexmonsterRef, FMFlexmonsterProps>(({ state:
     const groupState = useContext(FMStateContext);
     const state = ownState ?? groupState;
 
-    if (typeof window === 'undefined') {
-        return null;
-    }
-
-    const [containerId] = useState(`fm-flexmonster-${Math.random().toString(36).substr(2, 9)}`);
+    const containerId = `fm-flexmonster-${useId()}`;
     const flexmonsterRef = useRef<IFMFlexmonster | null>(null);
 
     useImperativeHandle(ref, () => {
@@ -46,7 +42,7 @@ const FMFlexmonster = forwardRef<FMFlexmonsterRef, FMFlexmonsterProps>(({ state:
         };
 
         return new Proxy({} as IFMFlexmonster, handler) as FMFlexmonsterRef;
-    });
+    }, []);
 
     useEffect(() => {
         const flexmonster = Flexmonster(containerId, { state, options });

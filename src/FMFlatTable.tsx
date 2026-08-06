@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { useContext, useEffect, useId, useRef, forwardRef, useImperativeHandle } from 'react';
 import { FlatTable, type IFMFlatTable, type IFMFlatTableOptionsInputParams, type StateInputParams } from '@flexmonster/js';
 import { FMStateContext } from './FMStateContext';
 
@@ -10,17 +10,14 @@ export interface FMFlatTableRef extends IFMFlatTable {
 export interface FMFlatTableProps {
   state?: StateInputParams;
   options?: IFMFlatTableOptionsInputParams;
+  name?: string;
 }
 
-const FMFlatTable = forwardRef<FMFlatTableRef, FMFlatTableProps>(({ state: ownState, options }, ref) => {
+const FMFlatTable = forwardRef<FMFlatTableRef, FMFlatTableProps>(({ state: ownState, options, name }, ref) => {
     const groupState = useContext(FMStateContext);
     const state = ownState ?? groupState;
 
-    if (typeof window === 'undefined') {
-        return null;
-    }
-
-    const [containerId] = useState(`fm-flat-table-${Math.random().toString(36).substr(2, 9)}`);
+    const containerId = `fm-flat-table-${useId()}`;
     const flatTableRef = useRef<IFMFlatTable | null>(null);
 
     useImperativeHandle(ref, () => {
@@ -46,10 +43,10 @@ const FMFlatTable = forwardRef<FMFlatTableRef, FMFlatTableProps>(({ state: ownSt
         };
 
         return new Proxy({} as IFMFlatTable, handler) as FMFlatTableRef;
-    });
+    }, []);
 
     useEffect(() => {
-        const flatTable = FlatTable(containerId, { state, options });
+        const flatTable = FlatTable(containerId, { state, options, name});
         flatTableRef.current = flatTable;
         return () => {
             flatTableRef.current?.dispose();

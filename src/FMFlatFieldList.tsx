@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { useContext, useEffect, useId, useRef, forwardRef, useImperativeHandle } from 'react';
 import { FlatFieldList, type IFMFlatFieldList, type IFMFlatFieldListOptionsInputParams, type StateInputParams } from '@flexmonster/js';
 import { FMStateContext } from './FMStateContext';
 
@@ -16,11 +16,7 @@ const FMFlatFieldList = forwardRef<FMFlatFieldListRef, FMFlatFieldListProps>(({ 
     const groupState = useContext(FMStateContext);
     const state = ownState ?? groupState;
 
-    if (typeof window === 'undefined') {
-        return null;
-    }
-
-    const [containerId] = useState(`fm-flat-field-list-${Math.random().toString(36).substr(2, 9)}`);
+    const containerId = `fm-flat-field-list-${useId()}`;
     const flatFieldListRef = useRef<IFMFlatFieldList | null>(null);
 
     useImperativeHandle(ref, () => {
@@ -46,7 +42,7 @@ const FMFlatFieldList = forwardRef<FMFlatFieldListRef, FMFlatFieldListProps>(({ 
         };
 
         return new Proxy({} as IFMFlatFieldList, handler) as FMFlatFieldListRef;
-    });
+    }, []);
 
     useEffect(() => {
         const flatFieldList = FlatFieldList(containerId, { state, options });

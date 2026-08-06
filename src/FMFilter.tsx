@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { useContext, useEffect, useId, useRef, forwardRef, useImperativeHandle } from 'react';
 import { Filter, type IFMFilter, type IFilterOptionsInputParams, type StateInputParams } from '@flexmonster/js';
 import { FMStateContext } from './FMStateContext';
 
@@ -17,11 +17,7 @@ const FMFilter = forwardRef<FMFilterRef, FMFilterProps>(({ state: ownState, opti
     const groupState = useContext(FMStateContext);
     const state = ownState ?? groupState;
 
-    if (typeof window === 'undefined') {
-        return null;
-    }
-
-    const [containerId] = useState(`fm-filter-${Math.random().toString(36).substr(2, 9)}`);
+    const containerId = `fm-filter-${useId()}`;
     const filterRef = useRef<IFMFilter | null>(null);
 
     useImperativeHandle(ref, () => {
@@ -47,7 +43,7 @@ const FMFilter = forwardRef<FMFilterRef, FMFilterProps>(({ state: ownState, opti
         };
 
         return new Proxy({} as IFMFilter, handler) as FMFilterRef;
-    });
+    }, []);
 
     useEffect(() => {
         const filter = Filter(containerId, { state, options, fieldName: fieldName! });

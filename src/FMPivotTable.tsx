@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { useContext, useEffect, useId, useRef, forwardRef, useImperativeHandle } from 'react';
 import { PivotTable, type IFMPivotTable, type IFMPivotTableOptionsInputParams, type StateInputParams } from '@flexmonster/js';
 import { FMStateContext } from './FMStateContext';
 
@@ -10,17 +10,14 @@ export interface FMPivotTableRef extends IFMPivotTable {
 export interface FMPivotTableProps {
   state?: StateInputParams;
   options?: IFMPivotTableOptionsInputParams;
+  name?: string;
 }
 
-const FMPivotTable = forwardRef<FMPivotTableRef, FMPivotTableProps>(({ state: ownState, options }, ref) => {
+const FMPivotTable = forwardRef<FMPivotTableRef, FMPivotTableProps>(({ state: ownState, options, name }, ref) => {
     const groupState = useContext(FMStateContext);
     const state = ownState ?? groupState;
 
-    if (typeof window === 'undefined') {
-        return null;
-    }
-
-    const [containerId] = useState(`fm-pivot-table-${Math.random().toString(36).substr(2, 9)}`);
+    const containerId = `fm-pivot-table-${useId()}`;
     const pivotTableRef = useRef<IFMPivotTable | null>(null);
 
     useImperativeHandle(ref, () => {
@@ -46,10 +43,10 @@ const FMPivotTable = forwardRef<FMPivotTableRef, FMPivotTableProps>(({ state: ow
         };
 
         return new Proxy({} as IFMPivotTable, handler) as FMPivotTableRef;
-    });
+    }, []);
 
     useEffect(() => {
-        const pivotTable = PivotTable(containerId, { state, options });
+        const pivotTable = PivotTable(containerId, { state, options, name });
         pivotTableRef.current = pivotTable;
         return () => {
             pivotTableRef.current?.dispose();
