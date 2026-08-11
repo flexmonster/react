@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useId, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { useContext, useEffect, useId, useRef, forwardRef, useImperativeHandle } from 'react';
 import { Flexmonster, IFMFlexmonsterInputParams, type IFMFlexmonster, type IFMFlexmonsterOptionsInputParams, type StateInputParams } from '@flexmonster/js';
+import { FMStateContext } from './FMStateContext';
 
 export interface FMFlexmonsterRef extends IFMFlexmonster {
 }
@@ -11,7 +12,10 @@ export interface FMFlexmonsterProps extends IFMFlexmonsterInputParams {
   options?: IFMFlexmonsterOptionsInputParams;
 }
 
-const FMFlexmonster = forwardRef<FMFlexmonsterRef, FMFlexmonsterProps>(({ state, options }, ref) => {
+const FMFlexmonster = forwardRef<FMFlexmonsterRef, FMFlexmonsterProps>(({ state: ownState, options }, ref) => {
+    const groupState = useContext(FMStateContext);
+    const state = ownState ?? groupState;
+
     const containerId = `fm-flexmonster-${useId()}`;
     const flexmonsterRef = useRef<IFMFlexmonster | null>(null);
 

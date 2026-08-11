@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useId, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { useContext, useEffect, useId, useRef, forwardRef, useImperativeHandle } from 'react';
 import { Toolbar, type IFMToolbar, type IFMToolbarOptionsInputParams, type StateInputParams } from '@flexmonster/js';
+import { FMStateContext } from './FMStateContext';
 
 export interface FMToolbarRef extends IFMToolbar {
 }
@@ -12,7 +13,10 @@ export interface FMToolbarProps {
   for?: string;
 }
 
-const FMToolbar = forwardRef<FMToolbarRef, FMToolbarProps>(({ state, options, for: forControl }, ref) => {
+const FMToolbar = forwardRef<FMToolbarRef, FMToolbarProps>(({ state: ownState, options, for: forControl }, ref) => {
+    const groupState = useContext(FMStateContext);
+    const state = ownState ?? groupState;
+
     const containerId = `fm-toolbar-${useId()}`;
     const toolbarRef = useRef<IFMToolbar | null>(null);
 

@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useId, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { useContext, useEffect, useId, useRef, forwardRef, useImperativeHandle } from 'react';
 import { Filter, type IFMFilter, type IFilterOptionsInputParams, type StateInputParams } from '@flexmonster/js';
+import { FMStateContext } from './FMStateContext';
 
 export interface FMFilterRef extends IFMFilter {
 }
@@ -12,7 +13,10 @@ export interface FMFilterProps {
     options?: IFilterOptionsInputParams;
 }
 
-const FMFilter = forwardRef<FMFilterRef, FMFilterProps>(({ state, options, fieldName }, ref) => {
+const FMFilter = forwardRef<FMFilterRef, FMFilterProps>(({ state: ownState, options, fieldName }, ref) => {
+    const groupState = useContext(FMStateContext);
+    const state = ownState ?? groupState;
+
     const containerId = `fm-filter-${useId()}`;
     const filterRef = useRef<IFMFilter | null>(null);
 
