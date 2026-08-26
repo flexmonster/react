@@ -26,7 +26,7 @@ export default [
         rootDir: 'src',
       }),
     ],
-    external: ['react', 'react-dom', '@flexmonster/flexmonster', '@flexmonster/react'],
+    external: ['react', 'react-dom', '@flexmonster/js', '@flexmonster/react'],
   },
   // Next.js entry — declarations already emitted by the main entry above
   {
@@ -45,7 +45,7 @@ export default [
     ],
     external: [
       'react', 'react-dom',
-      '@flexmonster/flexmonster', '@flexmonster/react',
+      '@flexmonster/js', '@flexmonster/react',
       'next', 'next/dynamic',
     ],
   },
