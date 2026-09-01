@@ -6,3 +6,4 @@ export { default as FMFlatFieldList, type FMFlatFieldListRef, type FMFlatFieldLi
 export { default as FMToolbar, type FMToolbarRef, type FMToolbarProps } from './FMToolbar';
 export { default as FMFilter, type FMFilterRef, type FMFilterProps } from './FMFilter';
 export { default as FMGroup, type FMGroupProps } from './FMGroup';
+export { FMCharts } from './FMCharts';
