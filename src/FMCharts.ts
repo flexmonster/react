@@ -5,7 +5,7 @@ import {
 } from '@flexmonster/js';
 
 export const FMCharts = {
-  ECharts(params: IFMEChartsInputParams): IFMECharts {
-    return ECharts(params);
+  ECharts(chart: object, params: IFMEChartsInputParams): IFMECharts {
+    return ECharts(chart, params);
   },
 };
