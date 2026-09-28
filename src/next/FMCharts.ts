@@ -1,8 +1,8 @@
 import type { IFMEChartsInputParams, IFMECharts } from '@flexmonster/js';
 
 export const FMCharts = {
-  async ECharts(params: IFMEChartsInputParams): Promise<IFMECharts> {
+  async ECharts(chart: object, params: IFMEChartsInputParams): Promise<IFMECharts> {
     const { FMCharts } = await import('@flexmonster/react');
-    return FMCharts.ECharts(params);
+    return FMCharts.ECharts(chart, params);
   },
 };
